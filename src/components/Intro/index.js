@@ -2,9 +2,28 @@ import gsap from 'gsap';
 import React, { useEffect, useRef } from 'react';
 import { ExpoScaleEase } from 'gsap/dist/EasePack';
 import Image from 'next/image';
+import styles from './index.module.css';
+import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
-const Intro = () => {
+const Intro = ({ handleTransition }) => {
   const sectionRef = useRef();
+
+  useEffect(() => {
+    const handleElementScroll = (event) => {
+      event.preventDefault();
+      handleTransition();
+    };
+
+    sectionRef.current.addEventListener('wheel', handleElementScroll);
+
+    return () => {
+      sectionRef?.current?.removeEventListener(
+        'wheel',
+        handleElementScroll
+      );
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -67,9 +86,9 @@ const Intro = () => {
   }, []);
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      className="relative h-screen py-12 box-border flex flex-col justify-between items-center overflow-hidden"
+      className={`${styles.scrollbar} relative h-screen py-12 box-border flex flex-col justify-between items-center overflow-x-hidden overflow-y-auto`}
     >
       <div className="absolute h-full w-full bg-white">
         <div className="img absolute w-full h-full invisible">
@@ -146,7 +165,7 @@ const Intro = () => {
         </p>
         <div className="line w-full h-[.15rem] bg-[#1a1a1a]"></div>
       </div>
-    </section>
+    </div>
   );
 };
 
