@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const LeftSidebar = ({
@@ -5,7 +6,9 @@ const LeftSidebar = ({
   selectedLeft,
   setSelectedLeft,
   isLeftOpen,
+  setIsLeftOpen,
 }) => {
+  const router = useRouter();
   return (
     <section
       className={`h-full z-20 absolute w-56 transition duration-500 border ${
@@ -16,7 +19,11 @@ const LeftSidebar = ({
         <div
           key={index}
           className="relative group cursor-pointer px-1 w-fit"
-          onClick={() => setSelectedLeft(index)}
+          onClick={() => {
+            setSelectedLeft(index);
+            router.push('/projects');
+            setIsLeftOpen(false);
+          }}
         >
           <p className="ml-2">{item?.label}</p>
           <div

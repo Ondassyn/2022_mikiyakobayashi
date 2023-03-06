@@ -1,19 +1,16 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
 const DEFAULT_IMG =
   'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80';
 
 const Item = ({ datum }) => {
+  const router = useRouter();
   const itemRef = useRef();
   const [itemHeight, setItemHeight] = useState();
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setItemHeight(itemRef?.current?.offsetWidth / 1.8);
-    console.log(
-      'itemRef?.current?.offsetWidth / 1.8',
-      itemRef?.current?.offsetWidth / 1.8
-    );
   }, [itemRef?.current?.offsetWidth]);
 
   useEffect(() => {
@@ -31,7 +28,7 @@ const Item = ({ datum }) => {
   return (
     <div
       ref={itemRef}
-      className={`relative w-1/5 cursor-pointer tracking-[.2rem] uppercase`}
+      className={`relative w-full cursor-pointer tracking-[.2rem] uppercase`}
       style={{
         height: itemHeight + 'px',
         overflow: 'hidden',
@@ -47,7 +44,6 @@ const Item = ({ datum }) => {
         ).style.opacity = 1;
         e.currentTarget.querySelector('.bg-layer').style.filter =
           'brightness(50%)';
-        setVisible(true);
       }}
       onMouseOut={(e) => {
         e.currentTarget.querySelector(
@@ -60,8 +56,8 @@ const Item = ({ datum }) => {
         ).style.opacity = 0;
         e.currentTarget.querySelector('.bg-layer').style.filter =
           'brightness(100%)';
-        setVisible(false);
       }}
+      onClick={() => router.push(`/projects/product/${datum?.id}`)}
     >
       <div
         className="bg-layer absolute w-full h-full"

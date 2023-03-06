@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Scaffold from '../Scaffold';
 import styles from './PrimaryLayout.module.css';
 import localFont from '@next/font/local';
+import { AnimatePresence } from 'framer-motion';
 
 const hiragino = localFont({
   src: [
@@ -39,11 +40,11 @@ const PrimaryLayout = ({ children, handleTransition }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main
-        className={`${hiragino.variable} ${styles.scrollbar} font-sans text-[#1a1a1a] overflow-x-hidden h-screen
+        className={`${hiragino.variable} ${styles.scrollbar} bg-[#f9f9f9] font-sans text-[#1a1a1a] overflow-x-hidden h-screen
           absolute top-0 left-0 z-10 w-full`}
       >
         <Scaffold handleTransition={handleTransition}>
-          {children}
+          <AnimatePresence mode="wait">{children}</AnimatePresence>
         </Scaffold>
       </main>
     </>

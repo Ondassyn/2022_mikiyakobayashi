@@ -74,6 +74,7 @@ const Scaffold = ({ children, handleTransition }) => {
           selectedLeft={selectedLeft}
           setSelectedLeft={setSelectedLeft}
           isLeftOpen={isLeftOpen}
+          setIsLeftOpen={setIsLeftOpen}
         />
         <div
           className={`w-full h-full ${
@@ -89,6 +90,7 @@ const Scaffold = ({ children, handleTransition }) => {
           selectedRight={selectedRight}
           setSelectedRight={setSelectedRight}
           isRightOpen={isRightOpen}
+          setIsRightOpen={setIsRightOpen}
         />
       </motion.div>
     </section>
