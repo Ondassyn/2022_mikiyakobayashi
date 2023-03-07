@@ -1,9 +1,10 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import LeftSidebar from './LeftSidebar';
 import Navbar from './Navbar';
 import RightSidebar from './RightSidebar';
 import { motion } from 'framer-motion';
+import ProgressContext from '@/utils/ProgressContext';
 
 const LEFT_SIDEBAR_ITEMS = [
   {
@@ -36,6 +37,7 @@ const LEFT_SIDEBAR_ITEMS = [
 ];
 
 const Scaffold = ({ children, handleTransition }) => {
+  const { progress } = useContext(ProgressContext);
   const [selectedLeft, setSelectedLeft] = useState(0);
   const [selectedRight, setSelectedRight] = useState(0);
   const [isLeftOpen, setIsLeftOpen] = useState(false);
@@ -43,12 +45,22 @@ const Scaffold = ({ children, handleTransition }) => {
   const [animationInProgress, setAnimationInProgress] =
     useState(true);
 
+  useEffect(() => {
+    console.log('progress', progress);
+  }, [progress]);
+
   return (
     <section
       className={`w-full h-full flex flex-col text-xs font-bold ${
         animationInProgress ? 'overflow-y-hidden' : ''
       }`}
     >
+      {progress !== 0 && progress !== 100 ? (
+        <div
+          className="left-0 h-1 bg-black"
+          style={{ width: `${progress}%` }}
+        ></div>
+      ) : undefined}
       <Navbar
         items={LEFT_SIDEBAR_ITEMS}
         selectedLeft={selectedLeft}

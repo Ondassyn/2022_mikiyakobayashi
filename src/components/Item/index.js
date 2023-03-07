@@ -4,10 +4,14 @@ import React, { useEffect, useRef, useState } from 'react';
 const DEFAULT_IMG =
   'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80';
 
-const Item = ({ datum }) => {
+const Item = ({ datum, setLoadedImages }) => {
   const router = useRouter();
   const itemRef = useRef();
   const [itemHeight, setItemHeight] = useState();
+
+  const backgroundImageUrl = datum?.images?.length
+    ? datum?.images[0]
+    : DEFAULT_IMG;
 
   useEffect(() => {
     setItemHeight(itemRef?.current?.offsetWidth / 1.8);
@@ -24,6 +28,14 @@ const Item = ({ datum }) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setLoadedImages((state) => state + 1);
+    };
+    img.src = backgroundImageUrl;
+  }, [backgroundImageUrl]);
 
   return (
     <div
@@ -62,9 +74,7 @@ const Item = ({ datum }) => {
       <div
         className="bg-layer absolute w-full h-full"
         style={{
-          backgroundImage: `url(${
-            datum?.images?.length ? datum?.images[0] : DEFAULT_IMG
-          })`,
+          backgroundImage: `url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           transition:

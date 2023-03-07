@@ -208,13 +208,4 @@ while its presence fits in any environment, either modern or classic. The simple
       'http://www.mikiyakobayashi.com/projects/product/ktc_5567.jpg',
     ],
   },
-  {
-    id: '0',
-    name: '',
-    year: '',
-    author: '',
-    type: '',
-    description: ``,
-    images: [],
-  },
 ];

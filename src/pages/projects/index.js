@@ -1,17 +1,25 @@
 import PrimaryLayout from '@/components/Layouts/PrimaryLayout';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { motion } from 'framer-motion';
 import { DATA } from '@/data/data';
 import Item from '@/components/Item';
 import gsap from 'gsap';
+import ProgressContext from '@/utils/ProgressContext';
 
 const Projects = () => {
   const sectionRef = useRef();
+  const { progress, setProgress } = useContext(ProgressContext);
 
   const [screenWidth, setScreenWidth] = useState();
   const [screenHeight, setScreenHeight] = useState();
   const [colsNo, setColsNo] = useState();
   const [isAnimated, setIsAnimated] = useState(true);
+  const [loadedImages, setLoadedImages] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -48,21 +56,24 @@ const Projects = () => {
   }, [screenWidth]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const ctx = gsap.context(() => {
-        gsap.to('.col', {
-          duration: 1,
-          stagger: 0.2,
-          translateY: '0px',
-          onComplete: () => {
-            setIsAnimated(false);
-          },
-        });
-      }, sectionRef);
+    if (loadedImages >= DATA?.length) {
+      setTimeout(() => {
+        const ctx = gsap.context(() => {
+          gsap.to('.col', {
+            duration: 1,
+            stagger: 0.2,
+            translateY: '0px',
+            onComplete: () => {
+              setIsAnimated(false);
+            },
+          });
+        }, sectionRef);
 
-      return () => ctx.revert();
-    }, 500);
-  }, [colsNo]);
+        return () => ctx.revert();
+      }, 200);
+    }
+    setProgress((loadedImages / DATA?.length) * 100);
+  }, [colsNo, loadedImages]);
 
   return (
     <div
@@ -70,7 +81,7 @@ const Projects = () => {
       key="projects"
       className={`h-full bg-[#f9f9f9] ${
         isAnimated && 'overflow-hidden'
-      } flex flex-col gap-8`}
+      } flex flex-col`}
     >
       <div className="w-full flex flex-row">
         {Array(colsNo)
@@ -95,7 +106,11 @@ const Projects = () => {
             >
               {DATA?.filter((_, j) => (j - i) % colsNo === 0)?.map(
                 (d) => (
-                  <Item key={d?.id} datum={d} />
+                  <Item
+                    key={d?.id}
+                    datum={d}
+                    setLoadedImages={setLoadedImages}
+                  />
                 )
               )}
             </div>
